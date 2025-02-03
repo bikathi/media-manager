@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: media-manager
+server:
+  port: 5100
+app:
+  storage:
+    base-path: /Downloads

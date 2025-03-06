@@ -38,15 +38,15 @@ public class MediaHandlingController {
         Files.copy(file.getInputStream(), fp, StandardCopyOption.REPLACE_EXISTING);
 
         // Return the URL of the file
-        String fileUrl = "/media/file" + fp;
+        String fileUrl = "/media/download" + fp.toString().replace(System.getProperty("user.home"), "");
         return ResponseEntity.ok().body(fileUrl);
     }
 
-    @RequestMapping(method = { RequestMethod.GET, RequestMethod.DELETE }, value = "/file/{*filePath}")
+    @RequestMapping(method = { RequestMethod.GET, RequestMethod.DELETE }, value = "/download/{*filePath}")
     public ResponseEntity<?> downloadFile(@PathVariable String filePath, HttpServletRequest request) {
-        // check the method if it is DELETE call the method to delete the file
-        Path fp = Paths.get(filePath);
+        Path fp = Paths.get(System.getProperty("user.home"), filePath);
 
+        // check the method if it is DELETE call the method to delete the file
         if (request.getMethod().equals(RequestMethod.DELETE.name())) {
             try {
                 this.deleteFile(fp);
@@ -58,7 +58,8 @@ public class MediaHandlingController {
             }
 
         }
-        if (Files.exists(fp)) {
+
+        if (Files.exists(fp) && request.getMethod().equals(RequestMethod.GET.name())) {
             try {
                 byte[] fileBytes = Files.readAllBytes(fp);
                 return ResponseEntity.ok()

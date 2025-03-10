@@ -1,6 +1,7 @@
 package npc.martin.mediamanager.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -15,6 +16,9 @@ import java.util.Objects;
 @RestController
 @RequestMapping(value = "/media")
 public class MediaHandlingController {
+    @Value("${app.base-url}")
+    private String appBaseUrl;
+
     @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> uploadFile(
         @RequestParam String filePath,
@@ -38,7 +42,7 @@ public class MediaHandlingController {
         Files.copy(file.getInputStream(), fp, StandardCopyOption.REPLACE_EXISTING);
 
         // Return the URL of the file
-        String fileUrl = "/media/download" + fp.toString().replace(System.getProperty("user.home"), "");
+        String fileUrl = appBaseUrl + "/media/download" + fp.toString().replace(System.getProperty("user.home"), "");
         return ResponseEntity.ok().body(fileUrl);
     }
 

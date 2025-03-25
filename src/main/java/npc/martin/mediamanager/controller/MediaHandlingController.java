@@ -29,7 +29,7 @@ public class MediaHandlingController {
 
         // Construct the absolute path of the user's downloads folder
         // Create directories if they don't exist
-        Path currentPath = Paths.get(System.getProperty("user.home"), basePath);
+        Path currentPath = Paths.get("/app/data", basePath); // /app/data is the mapping in the Docker container
         for (String token : pathTokens) {
             currentPath = currentPath.resolve(token);
             if (!Files.exists(currentPath)) {
@@ -42,13 +42,13 @@ public class MediaHandlingController {
         Files.copy(file.getInputStream(), fp, StandardCopyOption.REPLACE_EXISTING);
 
         // Return the URL of the file
-        String fileUrl = appBaseUrl + "/media/download" + fp.toString().replace(System.getProperty("user.home"), "");
+        String fileUrl = appBaseUrl + "/media/download" + fp.toString().replace("/app/data", "");
         return ResponseEntity.ok().body(fileUrl);
     }
 
     @RequestMapping(method = { RequestMethod.GET, RequestMethod.DELETE }, value = "/download/{*filePath}")
     public ResponseEntity<?> downloadFile(@PathVariable String filePath, HttpServletRequest request) {
-        Path fp = Paths.get(System.getProperty("user.home"), filePath);
+        Path fp = Paths.get("/app/data", filePath);
 
         // check the method if it is DELETE call the method to delete the file
         if (request.getMethod().equals(RequestMethod.DELETE.name())) {

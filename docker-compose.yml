@@ -1,0 +1,13 @@
+services:
+  regent-autovaluers:
+    image: media-manager
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5100:5100"
+    volumes:
+      - ${HOME}/ava-media:/app/data/ava-media:rw
+      - ${HOME}/valuation-media:/app/data/valuation-media:rw
+    restart: unless-stopped
+    user: "1000:1000"

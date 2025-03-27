@@ -1,6 +1,8 @@
 package npc.martin.mediamanager.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import npc.martin.mediamanager.service.PythonCaller;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -12,10 +14,14 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.nio.file.*;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 
 @RestController
 @RequestMapping(value = "/media")
 public class MediaHandlingController {
+    @Autowired
+    private PythonCaller pythonCaller;
+
     @Value("${app.base-url}")
     private String appBaseUrl;
 
@@ -40,6 +46,9 @@ public class MediaHandlingController {
         // Place the file in the created folder
         Path fp = currentPath.resolve(Objects.requireNonNull(file.getOriginalFilename()));
         Files.copy(file.getInputStream(), fp, StandardCopyOption.REPLACE_EXISTING);
+
+        // run the code to add the watermark
+        CompletableFuture.runAsync(() -> pythonCaller.callPythonScript(fp.toString(), fp.toString()));
 
         // Return the URL of the file
         String fileUrl = appBaseUrl + "/media/download" + fp.toString().replace("/app/data", "");

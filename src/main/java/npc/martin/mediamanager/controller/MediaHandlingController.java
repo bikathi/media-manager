@@ -47,8 +47,8 @@ public class MediaHandlingController {
         Path fp = currentPath.resolve(Objects.requireNonNull(file.getOriginalFilename()));
         Files.copy(file.getInputStream(), fp, StandardCopyOption.REPLACE_EXISTING);
 
-        // run the code to add the watermark
-        CompletableFuture.runAsync(() -> pythonCaller.callPythonScript(fp.toString(), fp.toString()));
+        // Call the Python script to compress and add watermark
+        CompletableFuture.runAsync(() -> pythonCaller.callPythonScript(fp.toString(), fp.toString(), "my demo watermark"));
 
         // Return the URL of the file
         String fileUrl = appBaseUrl + "/media/download" + fp.toString().replace("/app/data", "");

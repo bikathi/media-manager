@@ -62,7 +62,7 @@ def compress_and_watermark_webp(input_path, output_path, quality=80, method=6, w
         # Render each section of the watermark
         y = 10  # Initial y-coordinate
         for section in watermark_sections:
-            draw.text((10, y), section, font=font, fill=(255, 255, 0, 256))  # Render text in white
+            draw.text((10, y), section, font=font, fill=(255, 68, 51, 256))  # Render text in some orange shade
             y += font_size + 10  # Move to next line
 
         image.save(output_path, "webp")

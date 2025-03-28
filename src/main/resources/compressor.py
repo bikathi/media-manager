@@ -41,7 +41,7 @@ def compress_and_watermark_webp(input_path, output_path, quality=80, method=6, w
         draw = ImageDraw.Draw(image)
 
         # Load font and set font size
-        font_size = 60  # Adjust font size as needed
+        font_size = 50  # Adjust font size as needed
         try:
             font = ImageFont.truetype("Ubuntu-Medium.ttf", font_size)  # Use a font installed on your system
         except IOError:

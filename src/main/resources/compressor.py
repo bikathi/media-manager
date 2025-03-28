@@ -56,9 +56,15 @@ def compress_and_watermark_webp(input_path, output_path, quality=80, method=6, w
             # Older Pillow versions
             text_width, text_height = draw.textsize(watermark_text, font)
 
-        text_x = 10
-        text_y = 10
-        draw.text((text_x, text_y), watermark_text, font=font, fill=(255, 255, 0, 256))
+        # Split watermark text into sections
+        watermark_sections = watermark_text.split("#")
+
+        # Render each section of the watermark
+        y = 10  # Initial y-coordinate
+        for section in watermark_sections:
+            draw.text((10, y), section, font=font, fill=(255, 255, 0, 256))  # Render text in white
+            y += font_size + 10  # Move to next line
+
         image.save(output_path, "webp")
         os.remove(temp_watermarked_path)
         return True

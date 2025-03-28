@@ -29,6 +29,7 @@ public class MediaHandlingController {
     public ResponseEntity<String> uploadFile(
         @RequestParam String filePath,
         @RequestParam String basePath,
+        @RequestParam(required = false) String watermarkText,
         @RequestPart MultipartFile file
     ) throws IOException {
         String[] pathTokens = filePath.split("/");
@@ -48,7 +49,7 @@ public class MediaHandlingController {
         Files.copy(file.getInputStream(), fp, StandardCopyOption.REPLACE_EXISTING);
 
         // Call the Python script to compress and add watermark
-        CompletableFuture.runAsync(() -> pythonCaller.callPythonScript(fp.toString(), fp.toString(), "my demo watermark"));
+        CompletableFuture.runAsync(() -> pythonCaller.callPythonScript(fp.toString(), fp.toString(), watermarkText));
 
         // Return the URL of the file
         String fileUrl = appBaseUrl + "/media/download" + fp.toString().replace("/app/data", "");

@@ -41,7 +41,7 @@ def compress_and_watermark_webp(input_path, output_path, quality=80, method=6, w
         draw = ImageDraw.Draw(image)
 
         # Load font and set font size
-        font_size = 50  # Adjust font size as needed
+        font_size = 40  # Adjust font size as needed
         try:
             font = ImageFont.truetype("Ubuntu-Medium.ttf", font_size)  # Use a font installed on your system
         except IOError:
@@ -79,11 +79,11 @@ if __name__ == "__main__":
     parser.add_argument('--watermark_text', help='Text to add as watermark', default='')
     args = parser.parse_args()
 
-    compression_quality = 50
-    compression_method = 6
+    compression_quality = 40 # retain 40% of the original image
+    compression_method = 6 # lossless higher value means higher compression, from 0-6
     watermark_text = ""
 
-    print(f"Input file: {args.input_file} Output file: {args.output_file} Watermark text: {args.watermark_text}")
+    # print(f"Input file: {args.input_file} Output file: {args.output_file} Watermark text: {args.watermark_text}")
 
     if not os.path.exists(args.input_file):
         print(f"Input file {args.input_file} does not exist.")
@@ -94,7 +94,5 @@ if __name__ == "__main__":
     else:
         watermark_text = ""
 
-    if compress_and_watermark_webp(args.input_file, args.output_file, compression_quality, compression_method, watermark_text):
-        print(f"Successfully processed {args.input_file}. The output file is {args.output_file}")
-    else:
+    if not compress_and_watermark_webp(args.input_file, args.output_file, compression_quality, compression_method, watermark_text):
         print(f"An error occurred while processing {args.input_file}")

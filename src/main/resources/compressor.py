@@ -79,7 +79,7 @@ if __name__ == "__main__":
     parser.add_argument('--watermark_text', help='Text to add as watermark', default='')
     args = parser.parse_args()
 
-    compression_quality = 30 # retain 30% of the original image in lossy compression (default compression method)
+    compression_quality = 20 # retain 30% of the original image in lossy compression (default compression method)
     compression_method = 6 # lossless higher value means higher compression, from 0-6
     watermark_text = ""
 

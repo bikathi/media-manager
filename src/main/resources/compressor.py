@@ -4,7 +4,6 @@ from PIL import Image, ImageDraw, ImageFont
 import argparse
 
 def compress_and_watermark_webp(input_path, output_path, quality=80, method=6, watermark_text="Watermark"):
-    """Adds a watermark to a WebP image and then compresses it."""
     temp_watermarked_path = os.path.splitext(input_path)[0] + "_temp.webp"
 
     # Compression
@@ -41,7 +40,7 @@ def compress_and_watermark_webp(input_path, output_path, quality=80, method=6, w
         draw = ImageDraw.Draw(image)
 
         # Load font and set font size
-        font_size = 40  # Adjust font size as needed
+        font_size = 20  # Adjust font size as needed
         try:
             font = ImageFont.truetype("Ubuntu-Medium.ttf", font_size)  # Use a font installed on your system
         except IOError:

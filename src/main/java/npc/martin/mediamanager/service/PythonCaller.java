@@ -1,5 +1,6 @@
 package npc.martin.mediamanager.service;
 
+import jakarta.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -14,10 +15,10 @@ import java.util.Objects;
 public class PythonCaller {
     private static final Logger logger = LoggerFactory.getLogger(PythonCaller.class);
 
-    public final void callPythonScript(String inputFilePath, String outputFilePath, String watermarkText) {
+    public final void callPythonScript(String inputFilePath, String outputFilePath, String watermarkText, Boolean skipCompression) {
         try {
             // Execute the Python script
-            Process process = getProcess(inputFilePath, outputFilePath, watermarkText);
+            Process process = getProcess(inputFilePath, outputFilePath, watermarkText, skipCompression);
             try (BufferedReader processOutputReader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
                 String line;
                 while ((line = processOutputReader.readLine()) != null) {
@@ -35,20 +36,21 @@ public class PythonCaller {
         }
     }
 
-    private Process getProcess(String inputFilePath, String outputFilePath, String watermarkText) throws IOException {
-        ProcessBuilder processBuilder = Objects.isNull(watermarkText) || !StringUtils.hasLength(watermarkText) ? new ProcessBuilder(
+    private Process getProcess(String inputFilePath, String outputFilePath, @Nullable String watermarkText, Boolean skipCompression) throws IOException {
+        ProcessBuilder processBuilder = new ProcessBuilder(
             "python3",
             "/app/compressor.py",
             inputFilePath,
             outputFilePath
-        ) : new ProcessBuilder(
-            "python3",
-            "/app/compressor.py",
-            inputFilePath,
-            outputFilePath,
-            "--watermark_text",
-            watermarkText
         );
+        if (Objects.isNull(watermarkText) || !StringUtils.hasLength(watermarkText)) {
+            processBuilder.command().add("--watermark_text");
+            processBuilder.command().add(watermarkText);
+        }
+
+        if (skipCompression) {
+            processBuilder.command().add("--skip-compression");
+        }
 
         processBuilder.redirectErrorStream(true);
         return processBuilder.start();

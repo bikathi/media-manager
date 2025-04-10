@@ -18,6 +18,7 @@ import java.util.concurrent.CompletableFuture;
 
 @RestController
 @RequestMapping(value = "/media")
+@CrossOrigin(origins = {"https://control.regentautovaluers.com", "https://mobi.ava.ke"})
 public class MediaHandlingController {
     @Autowired
     private PythonCaller pythonCaller;
@@ -30,6 +31,7 @@ public class MediaHandlingController {
         @RequestParam String filePath,
         @RequestParam String basePath,
         @RequestParam(required = false) String watermarkText,
+        @RequestParam(required = false) Boolean skipCompression,
         @RequestPart MultipartFile file
     ) throws IOException {
         String[] pathTokens = filePath.split("/");
@@ -49,7 +51,7 @@ public class MediaHandlingController {
         Files.copy(file.getInputStream(), fp, StandardCopyOption.REPLACE_EXISTING);
 
         // Call the Python script to compress and add watermark
-        CompletableFuture.runAsync(() -> pythonCaller.callPythonScript(fp.toString(), fp.toString(), watermarkText));
+        CompletableFuture.runAsync(() -> pythonCaller.callPythonScript(fp.toString(), fp.toString(), watermarkText, skipCompression));
 
         // Return the URL of the file
         String fileUrl = appBaseUrl + "/media/download" + fp.toString().replace("/app/data", "");

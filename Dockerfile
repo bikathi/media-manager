@@ -8,9 +8,12 @@ FROM openjdk:17-jdk-slim
 WORKDIR /app
 COPY --from=build /app/target/mediamanager-0.0.1-SNAPSHOT.jar mediamanager-0.0.1-SNAPSHOT.jar
 
-# Copy the Python script
+# Copy the Python script(s)
 COPY src/main/resources/compressor.py /app/
 RUN chmod +x /app/compressor.py
+
+COPY src/main/resources/media-duplicator.py /app
+RUN chmod +x /app/media-duplicator.py
 
 # copy the Ubuntu font
 COPY src/main/resources/Ubuntu-Medium.ttf /app/

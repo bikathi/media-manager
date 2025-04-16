@@ -12,8 +12,8 @@ import java.io.InputStreamReader;
 import java.util.Objects;
 
 @Service
-public class PythonCaller {
-    private static final Logger logger = LoggerFactory.getLogger(PythonCaller.class);
+public class MediaHandlingPythonCaller {
+    private static final Logger logger = LoggerFactory.getLogger(MediaHandlingPythonCaller.class);
 
     public final void callPythonScript(String inputFilePath, String outputFilePath, String watermarkText, Boolean skipCompression) {
         try {

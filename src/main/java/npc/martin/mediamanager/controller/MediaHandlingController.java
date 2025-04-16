@@ -1,7 +1,7 @@
 package npc.martin.mediamanager.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
-import npc.martin.mediamanager.service.PythonCaller;
+import npc.martin.mediamanager.service.MediaHandlingPythonCaller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -21,7 +21,7 @@ import java.util.concurrent.CompletableFuture;
 @CrossOrigin(origins = {"https://control.regentautovaluers.com", "https://mobi.ava.ke"})
 public class MediaHandlingController {
     @Autowired
-    private PythonCaller pythonCaller;
+    private MediaHandlingPythonCaller mediaHandlingPythonCaller;
 
     @Value("${app.base-url}")
     private String appBaseUrl;
@@ -51,7 +51,7 @@ public class MediaHandlingController {
         Files.copy(file.getInputStream(), fp, StandardCopyOption.REPLACE_EXISTING);
 
         // Call the Python script to compress and add watermark
-        CompletableFuture.runAsync(() -> pythonCaller.callPythonScript(fp.toString(), fp.toString(), watermarkText, skipCompression));
+        CompletableFuture.runAsync(() -> mediaHandlingPythonCaller.callPythonScript(fp.toString(), fp.toString(), watermarkText, skipCompression));
 
         // Return the URL of the file
         String fileUrl = appBaseUrl + "/media/download" + fp.toString().replace("/app/data", "");

@@ -1,6 +1,7 @@
 import shutil
 import os
 import argparse
+import sys
 
 def duplicate_folder(original_folder, new_folder_name):
     parent_directory = os.path.dirname(original_folder)
@@ -11,8 +12,11 @@ def duplicate_folder(original_folder, new_folder_name):
         print(f"Successfully duplicated '{original_folder}' as '{new_folder_path}'")
     except FileExistsError:
         print(f"Error: Folder '{new_folder_name}' already exists.")
+        return False
     except Exception as e:
         print(f"An error occurred: {e}")
+        return False
+    return True
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Duplicate a folder and assign a new name to the copy.")
@@ -21,4 +25,6 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    duplicate_folder(args.folder_path, args.folder_name)
+    success = duplicate_folder(args.folder_path, args.folder_name)
+    if not success:
+        sys.exit(1)

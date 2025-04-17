@@ -13,7 +13,6 @@ public class MediaUtilsPythonCaller {
     private static final Logger logger = LoggerFactory.getLogger(MediaUtilsPythonCaller.class);
 
     public final void callPythonScript(String existingFolderPath, String newFolderName) throws Exception {
-        try {
             // Execute the Python script
             Process process = getProcess(existingFolderPath, newFolderName);
             try (BufferedReader processOutputReader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
@@ -27,11 +26,8 @@ public class MediaUtilsPythonCaller {
                 logger.info("Python script executed successfully");
             } else {
                 logger.error("Python script execution failed with exit code {}", exitCode);
+                throw new Exception("Failed to execute copy script!");
             }
-        } catch (Exception e) {
-            logger.error("An error occurred while executing the Python script.", e);
-            throw new RuntimeException("Failed to duplicate folders");
-        }
     }
 
     private Process getProcess(String existingFolderPath, String newFolderName) throws IOException {

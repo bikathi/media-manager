@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 @RestController
 @RequestMapping(value = "/utils")
 public class MediaUtilsController {
@@ -17,11 +20,11 @@ public class MediaUtilsController {
     @PostMapping(value = "/dup-media")
     public ResponseEntity<?> duplicateMedia(@RequestParam String folderPath, @RequestParam String newFolderName) {
         try {
-            mediaUtilsPythonCaller.callPythonScript(folderPath, newFolderName);
+            Path pathToFolder = Paths.get("/app/data/valuation-media", folderPath);
+            mediaUtilsPythonCaller.callPythonScript(pathToFolder.toString(), newFolderName);
             return ResponseEntity.ok(null);
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(null);
         }
-
     }
 }

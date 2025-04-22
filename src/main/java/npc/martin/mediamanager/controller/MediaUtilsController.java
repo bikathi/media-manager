@@ -1,12 +1,10 @@
 package npc.martin.mediamanager.controller;
 
+import npc.martin.mediamanager.dto.DuplicateValuationRequest;
 import npc.martin.mediamanager.service.MediaUtilsPythonCaller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -18,10 +16,10 @@ public class MediaUtilsController {
     private MediaUtilsPythonCaller mediaUtilsPythonCaller;
 
     @PostMapping(value = "/dup-media")
-    public ResponseEntity<?> duplicateMedia(@RequestParam String folderPath, @RequestParam String newFolderName) {
+    public ResponseEntity<?> duplicateMedia(@RequestBody DuplicateValuationRequest duplicateValuationRequest) {
         try {
-            Path pathToFolder = Paths.get("/app/data/valuation-media", folderPath);
-            mediaUtilsPythonCaller.callPythonScript(pathToFolder.toString(), newFolderName);
+            Path pathToFolder = Paths.get("/app/data/valuation-media", duplicateValuationRequest.getFolderPath());
+            mediaUtilsPythonCaller.callPythonScript(pathToFolder.toString(), duplicateValuationRequest.getNewFolderName());
             return ResponseEntity.ok(null);
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(null);

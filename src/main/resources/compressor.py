@@ -62,7 +62,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Compress and watermark WebP files')
     parser.add_argument('input_file', help='Path to the input WebP file')
     parser.add_argument('output_file', help='Path to the output WebP file')
-    parser.add_argument('--watermark_text', help='Text to add as watermark', default='Watermark')
+    parser.add_argument('--watermark_text', help='Text to add as watermark')
     parser.add_argument('--skip_compression', action='store_true', help='Skip compression step')
     args = parser.parse_args()
 

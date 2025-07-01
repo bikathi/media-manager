@@ -4,7 +4,6 @@ import jakarta.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -36,19 +35,19 @@ public class MediaHandlingPythonCaller {
         }
     }
 
-    private Process getProcess(String inputFilePath, String outputFilePath, @Nullable String watermarkText, Boolean skipCompression) throws IOException {
+    private Process getProcess(String inputFilePath, String outputFilePath, @Nullable String watermarkText, @Nullable Boolean skipCompression) throws IOException {
         ProcessBuilder processBuilder = new ProcessBuilder(
             "python3",
             "/app/compressor.py",
             inputFilePath,
             outputFilePath
         );
-        if (Objects.isNull(watermarkText) || !StringUtils.hasLength(watermarkText)) {
+        if (!Objects.isNull(watermarkText)) {
             processBuilder.command().add("--watermark_text");
             processBuilder.command().add(watermarkText);
         }
 
-        if (skipCompression) {
+        if (Boolean.TRUE.equals(skipCompression)) {
             processBuilder.command().add("--skip-compression");
         }
 
